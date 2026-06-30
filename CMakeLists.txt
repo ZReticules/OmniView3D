@@ -71,7 +71,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Qml)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Qml)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
+    Widgets
+    Qml
+    OpenGLWidgets
+)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -84,6 +88,17 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(OmniView3D
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        fileparser.cpp fileparser.h
+        glwidget.cpp glwidget.h
+        IconTools.h
+        lightdialog.cpp lightdialog.h lightdialog.ui
+        main.cpp
+        mainwindow.cpp mainwindow.h mainwindow.ui
+        base_shader.vert
+        base_shader.frag
+        axes_shader.frag
+        axes_shader.vert
+        Convert3D.h
     )
 
 # После add_executable
@@ -112,6 +127,8 @@ endif()
 target_link_libraries(OmniView3D PRIVATE 
 	Qt${QT_VERSION_MAJOR}::Widgets
 	Qt${QT_VERSION_MAJOR}::Qml
+        Qt${QT_VERSION_MAJOR}::OpenGLWidgets
+        OpenGL32.lib
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
