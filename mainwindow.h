@@ -5,8 +5,8 @@
 #include <QSettings>
 #include <QDoubleSpinBox>
 #include <QToolButton>
+#include <QFrame>
 #include "fileparser.h"
-#include "ui_mainwindow.h"
 #include "glwidget.h"
 #include "lightdialog.h"
 

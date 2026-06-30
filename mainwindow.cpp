@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 #include <QDebug>
 #include <QTimer>
 #include <QTime>
@@ -27,7 +27,8 @@ using std::vector;
 const std::map<QString, FileParser::ParserFunction> MainWindow::parsers = {
     {"Binary STL (*.stl)", FileParser::ParseStlGL},
     {"ASCII STL (*.stl)", FileParser::ParseStlAsciiGL},
-    {"ASCII Raw triangles (*.*)", FileParser::ParseTxtGL}
+    {"ASCII Raw triangles (*.*)", FileParser::ParseTxtGL},
+    {"Wavefront .obj (*.obj)", FileParser::ParseObjGL}
 };
 
 const QString MainWindow::fopenFilters = []()->QString{

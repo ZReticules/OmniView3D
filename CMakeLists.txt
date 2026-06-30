@@ -72,6 +72,8 @@ endif()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Qml)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
+    Core
+    Gui
     Widgets
     Qml
     OpenGLWidgets
@@ -92,8 +94,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         glwidget.cpp glwidget.h
         IconTools.h
         lightdialog.cpp lightdialog.h lightdialog.ui
-        main.cpp
-        mainwindow.cpp mainwindow.h mainwindow.ui
         base_shader.vert
         base_shader.frag
         axes_shader.frag
@@ -101,10 +101,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Convert3D.h
     )
 
-# После add_executable
-target_include_directories(OmniView3D PRIVATE 
-    ${CMAKE_CURRENT_BINARY_DIR}/OmniView3D_autogen/include
-)
+    # После add_executable
+    # target_include_directories(OmniView3D PRIVATE
+    #     ${CMAKE_CURRENT_BINARY_DIR}/OmniView3D_autogen/include
+    # )
 
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET OmniView3D APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -125,10 +125,12 @@ else()
 endif()
 
 target_link_libraries(OmniView3D PRIVATE 
-	Qt${QT_VERSION_MAJOR}::Widgets
-	Qt${QT_VERSION_MAJOR}::Qml
-        Qt${QT_VERSION_MAJOR}::OpenGLWidgets
-        OpenGL32.lib
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Qml
+    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
+    OpenGL32.lib
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

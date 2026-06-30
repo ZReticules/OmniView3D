@@ -98,10 +98,64 @@ bool FileParser::ParseTxtGL(vector<float> &items, wstring path, bool needClear)
         return false;
     if(needClear)
         items.clear();
-    stringstream ss;
     string strBuf;
     float coordVal;
     while(data >> coordVal)
         items.push_back(coordVal);
+    return true;
+}
+
+bool FileParser::ParseObjGL(vector<float> &items, wstring path, bool needClear)
+{
+    ifstream data(path.c_str());
+    if(!data.is_open())
+        return false;
+    if(needClear)
+        items.clear();
+    string line;
+    vector<array<float, 3>> vertices;
+    vector<vector<int>> faces;
+    while(!data.eof())
+    {
+        getline(data, line);
+        if(line.size() == 0)
+            continue;
+        switch(line[0])
+        {
+        case 'v':
+            float x, y, z;
+            sscanf(line.c_str(), "v %f %f %f", &x, &y, &z);
+            vertices.push_back({x, y, z});
+            break;
+        case 'f':
+            stringstream ss(line);
+            ss >> line; // skip "f "
+            faces.push_back({});
+            auto& face = faces[faces.size()-1];
+            while(!ss.eof())
+            {
+                ss >> line;
+                int vert_idx;
+                sscanf(line.c_str(), "%d", &vert_idx);
+                face.push_back(vert_idx > 0 ? vert_idx - 1 : faces.size() - vert_idx);
+            }
+            break;
+        }
+    }
+    for(auto& face : faces)
+        for(int i = 1; i < face.size() - 1; i++)
+        {
+            items.push_back(vertices[face[0]][0]);
+            items.push_back(vertices[face[0]][2]);
+            items.push_back(-vertices[face[0]][1]);
+
+            items.push_back(vertices[face[i]][0]);
+            items.push_back(vertices[face[i]][2]);
+            items.push_back(-vertices[face[i]][1]);
+
+            items.push_back(vertices[face[i + 1]][0]);
+            items.push_back(vertices[face[i + 1]][2]);
+            items.push_back(-vertices[face[i + 1]][1]);
+        }
     return true;
 }
